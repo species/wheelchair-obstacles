@@ -68,9 +68,9 @@ var different_maps = [
     buildOverpassQuery();
  //   overpass_query_nodes = '//overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:BBOX];node["wheelchair"~"limited|no"]["kerb"];out;node["kerb"]["traffic_signals:minimap"="wrong"];out;';
  //   overpass_query_nodes = 'http://api.openstreetmap.fr/oapi/interpreter?data=[out:json][timeout:180][bbox:47.056,15.4425287,47.0796206,15.473];node["wheelchair"~"limited|no"]["kerb"];out;node["kerb"]["traffic_signals:minimap"="wrong"];out;node["kerb"]["image"];out;';
-    overpass_query_nodes = 'http://overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:47.056,15.4425287,47.0796206,15.473];node["wheelchair"~"limited|no"]["kerb"];out;node["kerb"]["traffic_signals:minimap"="wrong"];out;node["kerb"]["image"];out;';
+    overpass_query_nodes = 'http://overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:BBOX];node["wheelchair"~"limited|no"]["kerb"];out;node["traffic_signals:minimap"="wrong"];out;node["kerb"]["image"];out;';
  //   overpass_query_ways = 'http://overpass.osm.rambler.ru/cgi/interpreter?data=[out:json][timeout:180][bbox:BBOX];(way["wheelchair"~"limited|no"]["highway"~"footway|cycleway|service"];node(w));out;';
-    overpass_query_ways = 'http://overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:47.056,15.4425287,47.0796206,15.473];(way["wheelchair"~"limited|no"]["highway"~"footway|cycleway|service"];node(w));out;(way["overtaking:wheelchair"="no"];node(w));out;(way["incline:length"];node(w));out;';
+    overpass_query_ways = 'http://overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:BBOX];(way["wheelchair"~"limited|no"]["highway"~"footway|cycleway|service"];node(w));out;(way["overtaking:wheelchair"="no"];node(w));out;(way["incline:length"];node(w));out;';
     overpass_query_rels = 'http://localhost/?data=BBOX';
 
    var about_text = '<p>This map displays OpenStreetMap objects relevant for wheelchair routing.</p>'
@@ -149,8 +149,8 @@ var different_maps = [
       var hash = new L.Hash(map); // Leaflet persistent Url Hash function
 
       loadPoi();
- //     map.on('moveend', loadPoi);
- //     map.on('viewreset', loadPoi);
+      map.on('moveend', loadPoi);
+      map.on('viewreset', loadPoi);
 
       setTimeout(addSearch,500); //seems to break with prunecluster when loaded instantly, this fix helps
       addLocate();
