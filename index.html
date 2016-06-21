@@ -82,7 +82,9 @@ var different_maps = [
     overpass_query_ways = 'http://overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:BBOX];'+
     '(way["wheelchair"~"^(limited|no)$"]["highway"~"^(footway|cycleway|service|path)$"];node(w));out;'+
     '(way["overtaking:wheelchair"="no"];node(w));out;'+
-    '(way[incline]["highway"~"^(footway|cycleway|service|path)$"]["incline"!~"^-?([0-3]|[012][.][0-9]*) ?%$"]["wheelchair"!~"^(yes|designated)$"];node(w));out;';
+    '(way["wheelchair:turning"="no"];node(w));out;'+
+    '(way[incline]["highway"~"^(footway|cycleway|service|path)$"]["incline"!~"^-?([0-3]|[012][.][0-9]*) ?%$|^0$"]["wheelchair"!~"^(yes|designated)$"];node(w));out;'+
+    '(way["incline:across"]["incline:across"!~"^-?([0-6]|[012345][.][0-9]*) ?%$|^0$"];node(w));out;';
 
     overpass_query_rels = 'http://localhost/?data=BBOX';
 //    overpass_query_ways = 'http://localhost/?data=BBOX';
