@@ -338,7 +338,7 @@ function initMap(defaultlayer,base_maps,overlay_maps,lat,lon,zoom) {
           map.on('moveend',updateFilterCount); // here because it is called on every map move
   }
 
-  $('#map').append('<a href="https://github.com/TransforMap/transfor-map" title="Fork me on GitHub" id=forkme></a>');
+  $('#map').append('<a href="https://github.com/species/wheelchair-obstacles" title="Fork me on GitHub" id=forkme></a>');
   $('#forkme').append('<img src="'+assethost+'assets/forkme-on-github.png" alt="Fork me on GitHub" />');
 
   $('#map').append('<img src="'+assethost+'assets/ajax-loader.gif" id="loading_node" class="loading" />');
