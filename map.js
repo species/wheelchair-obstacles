@@ -1877,6 +1877,12 @@ function loadPoi() {
           p.coordinates = [p.lon, p.lat];
           p.geometry = {type: 'Point', coordinates: p.coordinates};
           nodes[p.id] = p;
+
+          var retval = nodeFunction(p);
+          if (retval) {
+            new_markers.push(retval);
+          }
+
           break;
         case 'way':
           p.coordinates = p.nodes.map(function (id) {
@@ -2033,14 +2039,14 @@ function loadPoi() {
       maxlon : L.Util.formatNum(bounds._northEast.lng,4)
   }
 
-  changeLoadingIndicator("loading_node", +1);
-  var this_pid = pids.node.counter++;
-  pids.node.active[this_pid] = { state : "running", bounds : bounds_rounded } ;
-  console.log("loadPOI: before JSON call pid node"+this_pid+": " + node_url);
-  $.getJSON(node_url, handleNodes);
-  setTimeout(function () {
-      timeOutOverpassCall("node", this_pid);
-  },1000*overpass_config.timeout);
+//  changeLoadingIndicator("loading_node", +1);
+//  var this_pid = pids.node.counter++;
+//  pids.node.active[this_pid] = { state : "running", bounds : bounds_rounded } ;
+//  console.log("loadPOI: before JSON call pid node"+this_pid+": " + node_url);
+//  $.getJSON(node_url, handleNodes);
+//  setTimeout(function () {
+//      timeOutOverpassCall("node", this_pid);
+//  },1000*overpass_config.timeout);
 
   changeLoadingIndicator("loading_way", +1);
   this_pid = pids.way.counter++;
