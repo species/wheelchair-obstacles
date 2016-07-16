@@ -247,9 +247,9 @@ function buildOverpassQuery() {
     overpass_query_nodes = overpass_config.servers[0] + overpass_urlstart + overpass_start + overpass_query_string_nodes;
     overpass_query_ways = overpass_config.servers[1] + overpass_urlstart + overpass_start + overpass_query_string_ways;
     overpass_query_rels = overpass_config.servers[2] + overpass_urlstart + overpass_start + overpass_query_string_rels;
-    console.log(overpass_query_nodes);
-    console.log(overpass_query_ways);
-    console.log(overpass_query_rels);
+//    console.log(overpass_query_nodes);
+//    console.log(overpass_query_ways);
+//    console.log(overpass_query_rels);
 }
 
 var debugLayer,
@@ -1270,6 +1270,7 @@ function loadPoi() {
   }
 
   var bounds = map.getBounds();
+  console.log(bounds);
   if(checkIfInRequestedBboxesAndIfNotaddTo(bounds))
       return;
 
@@ -1288,6 +1289,10 @@ function loadPoi() {
   function fillPopup(tags,type,id,lat,lon) {
 
     var tags_to_ignore = [ "name" , "ref", "addr:street", "addr:housenumber", "addr:postcode", "addr:city", "addr:suburb", "addr:country","website","url","contact:website","contact:url","email","contact:email","phone","contact:phone","fax","contact:fax","created_by","area","layer","room","indoor","twitter","contact:twitter","link:twitter", "contact:google_plus", "google_plus", "link:google_plus", "contact:facebook","facebook","link:facebook","facebook:page","website:facebook","url:facebook","contact:youtube","youtube","link:youtube","wheelchair","wikipedia","wikidata","image","source","lit","segregated","motor_vehicle" ];
+    var tags_to_ignore = [ "name" ]; 
+
+    var r = $('<table>');
+
 
     var r = $('<table>');
 
@@ -1711,13 +1716,18 @@ function loadPoi() {
     centroid.lon = centroid.coordinates[0];
     centroid.lat = centroid.coordinates[1];
 
+    var returned_color = getWayColorOrDontDisplay(data.tags)
+    if(!returned_color)
+      return;
+
     var style = {
-      color: "#FF0000",
+      color: returned_color,
       fill:false, //set only true on areas
       fillColor:'blue',
       fillOpacity:0.5,
       weight: 6
     };
+
 
     geometry_layer.addData({ // bind on geometry
       type: 'Feature',
@@ -1725,7 +1735,7 @@ function loadPoi() {
       properties: {name: fillPopup(data.tags,data.type,data.id,centroid.lat,centroid.lon), style: style}
     });
 
-    return bindPopupOnData(centroid); //bind on centroid
+    return//  bindPopupOnData(centroid); //bind on centroid
   }
   function relationFunction(data) {
     // calculate mean coordinates as center
@@ -1872,11 +1882,16 @@ function loadPoi() {
     var nodes = {};
     for (var i = 0; i < overpassJSON.elements.length; i++) {
       var p = overpassJSON.elements[i];
+      var tags = p.tags;
       switch (p.type) {
         case 'node':
+
           p.coordinates = [p.lon, p.lat];
           p.geometry = {type: 'Point', coordinates: p.coordinates};
           nodes[p.id] = p;
+
+          if(node_should_be_displayed(tags) == false)
+            break;
 
           var retval = nodeFunction(p);
           if (retval) {
@@ -1889,6 +1904,11 @@ function loadPoi() {
             return nodes[id].coordinates;
           });
           p.geometry = {type: 'LineString', coordinates: p.coordinates};
+
+        /*  var hashtable_key = p.type + p.id; // e.g. "node1546484546"
+          if(marker_table[hashtable_key] == 1) //object already there
+            return;
+          marker_table[hashtable_key] = 1; */
 
           var retval = wayFunction(p);
           if (retval) {
