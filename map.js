@@ -1883,39 +1883,41 @@ function loadPoi() {
     for (var i = 0; i < overpassJSON.elements.length; i++) {
       var p = overpassJSON.elements[i];
       var tags = p.tags;
-      switch (p.type) {
-        case 'node':
+      if(p.type == 'node') {
+        p.coordinates = [p.lon, p.lat];
+        p.geometry = {type: 'Point', coordinates: p.coordinates};
+        nodes[p.id] = p;
 
-          p.coordinates = [p.lon, p.lat];
-          p.geometry = {type: 'Point', coordinates: p.coordinates};
-          nodes[p.id] = p;
+        if(node_should_be_displayed(tags) == false)
+          continue;
 
-          if(node_should_be_displayed(tags) == false)
-            break;
+        var retval = nodeFunction(p);
+        if (retval) {
+          new_markers.push(retval);
+        }
 
-          var retval = nodeFunction(p);
-          if (retval) {
-            new_markers.push(retval);
-          }
+      }
+    }
+    for (var i = 0; i < overpassJSON.elements.length; i++) {
+      var p = overpassJSON.elements[i];
+      if(p.type == 'way') {
 
-          break;
-        case 'way':
-          p.coordinates = p.nodes.map(function (id) {
-            return nodes[id].coordinates;
-          });
-          p.geometry = {type: 'LineString', coordinates: p.coordinates};
+        p.coordinates = p.nodes.map(function (id) {
+          return nodes[id].coordinates;
+        });
+        p.geometry = {type: 'LineString', coordinates: p.coordinates};
 
-        /*  var hashtable_key = p.type + p.id; // e.g. "node1546484546"
-          if(marker_table[hashtable_key] == 1) //object already there
-            return;
-          marker_table[hashtable_key] = 1; */
+      /*  var hashtable_key = p.type + p.id; // e.g. "node1546484546"
+        if(marker_table[hashtable_key] == 1) //object already there
+          return;
+        marker_table[hashtable_key] = 1; */
 
-          var retval = wayFunction(p);
-          if (retval) {
-            if(window.filters)
-                retval.filtered = ! getFilterStatusOnPoi(retval);
-            new_markers.push(retval);
-          }
+        var retval = wayFunction(p);
+        if (retval) {
+          if(window.filters)
+              retval.filtered = ! getFilterStatusOnPoi(retval);
+          new_markers.push(retval);
+        }
       }
     }
 
