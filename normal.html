@@ -135,11 +135,14 @@ var different_maps = [
       if(!tags["highway"])
         return false;
 
+      if(tags["indoor"] && tags["indoor"] == "yes")
+        return false;
+
       var tmp_color = "";
 
       if(tags["incline"]) {
         var incline;
-        if (tags["incline"].match(/%$/))
+        if (tags["incline"].match(/%$/) || parseFloat(tags["incline"]) == 0)
           incline = Math.abs(parseFloat(tags["incline"]));
         else
           return red; //up and down and all unknown
