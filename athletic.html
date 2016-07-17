@@ -123,8 +123,6 @@ var different_maps = [
           return false;
       }
       if(tags["kerb"]) {
-        if(tags["kerb"] == "raised")
-          return true;
         if(tags["kerb:height"]) {
           var kerb_height = (tags["kerb:height"].match(/cm$/)) ? parseFloat(tags["kerb:height"])/100 : parseFloat(tags["kerb:height"]);
           if(kerb_height <= 0.08)
@@ -132,6 +130,8 @@ var different_maps = [
           else
             return true;
         }
+        if(tags["kerb"] == "raised")
+          return true;
       }
       return false;
     }
