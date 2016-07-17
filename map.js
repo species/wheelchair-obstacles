@@ -1,10 +1,18 @@
 if(!window.console)  // for very old browser
     var console = { log : function(i){}}
 
-var language = window.navigator.languages ? window.navigator.languages[0] : (window.navigator.language || window.navigator.userLanguage);
+var language = [];
+if(window.navigator.languages && window.navigator.languages.length != 0)
+  language.push(window.navigator.languages[0]);
 
-if(typeof language === 'string')
-    language = [ language ];
+if(window.navigator.language)
+  language.push(window.navigator.language);
+
+if(window.navigator.userLanguage)
+  language.push(window.navigator.userLanguage);
+
+if(language.length == 0)
+  language.push("en")
 
 // we need to have the following languages:
 // browserlang
