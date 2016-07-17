@@ -85,22 +85,22 @@ var different_maps = [
     'node["kerb:height"]["kerb:height"!~"^([0-3]|[012][.][0-9]*) ?cm$|^0$"];out;'+
     'node["traffic_calming"]["wheelchair"~"limited|no"];out;' + 
     '(way["wheelchair"~"^(limited|no)$"]["highway"~"^(footway|cycleway|service|path)$"];node(w));out;'+
-    '(way["overtaking:wheelchair"="no"];node(w));out;'+
+    '(way["overtaking:wheelchair"="no"];node(w));out;'+ // is only set on ways with 'width'-tag
     '(way["wheelchair:turning"="no"];node(w));out;'+
     '(way[incline]["highway"~"^(footway|cycleway|service|path)$"]["incline"!~"^-?([0-3]|[012][.][0-9]*) ?%$|^0$"]["wheelchair"!~"^(yes|designated)$"];node(w));out;'+
     '(way["incline:across"]["incline:across"!~"^-?([0-6]|[012345][.][0-9]*) ?%$|^0$"];node(w));out;';
 
     overpass_query_ways = 'http://overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:BBOX];'+
-    'node["kerb"="raised"];out;'+
-    'node["kerb:height"];out;' + 
-    'node["traffic_calming"];out;' + 
-    '(way[highway]["wheelchair"="no"];node(w));out;'+
-    '(way[highway]["wheelchair"="limited"];node(w));out;'+
-    '(way["overtaking:wheelchair"="no"];node(w));out;'+
-    '(way["wheelchair:turning"="no"];node(w));out;'+
-    '(way[width];node(w));out;'+
-    '(way[incline];node(w));out;'+
-    '(way["incline:across"];node(w));out;';
+    '(' +
+    'node["kerb"="raised"];'+ // ;<; include ways of kerbs too ... needed if we want to filter out kerbs from service
+    'node["kerb:height"];' +
+    'node["traffic_calming"];' +
+    'way[highway]["wheelchair"="no"];'+
+    'way[highway]["wheelchair"="limited"];'+
+    'way[width];'+
+    'way[incline];'+
+    'way["incline:across"];' +
+    ');out body;>;out skel qt;' ;
 
     function node_should_be_displayed(tags) {
       if(!tags)
@@ -137,8 +137,13 @@ var different_maps = [
 
       var tmp_color = "";
 
-      if(tags["incline"] && tags["incline"].match(/%$/)) {
-        var incline = Math.abs(parseFloat(tags["incline"]));
+      if(tags["incline"]) {
+        var incline;
+        if (tags["incline"].match(/%$/))
+          incline = Math.abs(parseFloat(tags["incline"]));
+        else
+          return red; //up and down and all unknown
+
         if(incline > 3) {
           if(incline <= 6 && incline > 3 && tags["wheelchair"] && (tags["wheelchair"] == "yes" || tags["wheelchair"] == "designated") )
             tmp_color = yellow;
@@ -149,9 +154,13 @@ var different_maps = [
       }
       if(tags["incline:across"] && tags["incline:across"].match(/%$/)) {
         var incline = Math.abs(parseFloat(tags["incline:across"]));
-        if(incline > 6)
-          return red;
+        if(incline > 6) {
+          if(tags["wheelchair"] && (tags["wheelchair"] == "yes" || tags["wheelchair"] == "designated"))
+            tmp_color = yellow;
+          else
+            return red;
         // display green if <=6?
+        }
       }
       if(tags["width"] && parseFloat(tags["width"]) < 0.8)
           return red;
