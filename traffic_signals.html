@@ -103,32 +103,18 @@ var different_maps = [
     '(way["incline:across"]["incline:across"!~"^-?([0-6]|[012345][.][0-9]*) ?%$|^0$"];node(w));out;';
 
     overpass_query_ways = 'http://overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:BBOX];'+
-    'node["traffic_signals:minimap"="wrong"];'+ // ;<; include ways of kerbs too ... needed if we want to filter out kerbs from service
-    'node["traffic_signals:sound"="defect"];' +
-    'node["traffic_signals:vibration"="defect"];' +
+    'node["traffic_signals:minimap"="wrong"];out;'+ // ;<; include ways of kerbs too ... needed if we want to filter out kerbs from service
+    'node["traffic_signals:sound"="defect"];out;' +
+    'node["traffic_signals:vibration"="defect"];out;' +
     'node["traffic_signals:arrow"="defect"];out;'
 
     function node_should_be_displayed(tags) {
       if(!tags)
         return false;
-      if(tags["traffic_calming"]) {
-        if(tags["wheelchair"] == "no" || tags["wheelchair"] == "limited")
-          return true;
-        else
-          return false;
-      }
-      if(tags["kerb"]) {
-        if(tags["kerb"] == "raised")
-          return true;
-        if(tags["kerb:height"]) {
-          var kerb_height = (tags["kerb:height"].match(/cm$/)) ? parseFloat(tags["kerb:height"])/100 : parseFloat(tags["kerb:height"]);
-          if(kerb_height <= 0.03)
-            return false;
-          else
-            return true;
-        }
-      }
-      return false;
+      if(tags["traffic_signals:minimap"] || tags["traffic_signals:sound"] || tags["traffic_signals:vibration"] || tags["traffic_signals:arrow"] )
+        return true;
+      else
+        return false;
     }
     
     var red = "#FF0000",
