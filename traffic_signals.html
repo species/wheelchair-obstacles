@@ -168,6 +168,26 @@ var different_maps = [
       return false;
     }
 
+    function chooseIconSrc(tags,iconsize) {
+      var icon_uri_start = assethost+"assets/poi-icons/" + overpass_config.icon_folder + "/" + iconsize + "/";
+      var icon_url = "";
+
+      if(tags["traffic_signals:minimap"] == "wrong")
+        return icon_uri_start + "traffic_signals:minimap=wrong.png";
+
+      if(tags["traffic_signals:sound"] == "defect")
+        return icon_uri_start + "traffic_signals:sound=defect.png";
+
+      if(tags["traffic_signals:arrow"] == "defect")
+        return icon_uri_start + "traffic_signals:arrow=defect.png";
+
+      if(tags["traffic_signals:vibration"] == "defect")
+        return icon_uri_start + "traffic_signals:vibration=defect.png";
+
+      return icon_uri_start + "/unknown.png";
+
+    }
+
     overpass_query_rels = 'http://localhost/?data=BBOX';
 //    overpass_query_ways = 'http://localhost/?data=BBOX';
 
@@ -175,45 +195,26 @@ var different_maps = [
         + about.overpass
         + about.export_opendata ; 
 
-    var mapkey = '<li onClick="toggleInfoBox(\'steig-red.\');">'
-      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/incline_up_red.png" /> '
-      + 'Hohe Steigung ab 6%'
-      + '<div class="InfoBox nointend" id="steig-red.">Steigungen &gt; 6%</div>'
+    var mapkey = '';
+    mapkey += '<li onClick="toggleInfoBox(\'arrow.\');">'
+      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/traffic_signals:arrow=defect.png" /> '
+      + 'Pfeil Defekt/Fehlt'
+      + '<div class="InfoBox nointend" id="arrow.">Pfeil Falsch/Fehlt</div>'
       + '</li>';
-    mapkey += '<li onClick="toggleInfoBox(\'steig-y.\');">'
-      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/incline_up_orange.png" /> '
-      + 'Mittlere Steigung bis 6%'
-      + '<div class="InfoBox nointend" id="steig-y.">Steigungen bis 6%</div>'
+    mapkey += '<li onClick="toggleInfoBox(\'sound.\');">'
+      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/traffic_signals:sound=defect.png" /> '
+      + 'Akustisches Signal Defekt'
+      + '<div class="InfoBox nointend" id="sound.">Akustisches Signal Defekt/Ausgefallen</div>'
       + '</li>';
-    mapkey += '<li onClick="toggleInfoBox(\'steig-q.\');">'
-      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/incline_across-right_red.png" /> '
-      + 'Hohe Querneigung'
-      + '<div class="InfoBox nointend" id="steig-q.">Hohe Querneigungen ab 6%</div>'
+    mapkey += '<li onClick="toggleInfoBox(\'vibration.\');">'
+      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/traffic_signals:vibration=defect.png" /> '
+      + 'Vibrationsplatte Defekt'
+      + '<div class="InfoBox nointend" id="vibration.">Vibrations-Platte Defekt/Ausgefallen</div>'
       + '</li>';
-    mapkey += '<li onClick="toggleInfoBox(\'schmal.\');">'
-      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/width-bad.png" /> '
-      + 'Engstelle'
-      + '<div class="InfoBox nointend" id="schmal.">Engstellen, meistens &lt; 90cm</div>'
-      + '</li>';
-    mapkey += '<li onClick="toggleInfoBox(\'hoch.\');">'
-      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/kerb=raised.png" /> '
-      + 'Kante &gt; 3cm'
-      + '<div class="InfoBox nointend" id="hoch.">Gehsteigkanten &gt; 3cm</div>'
-      + '</li>';
-    mapkey += '<li onClick="toggleInfoBox(\'turn.\');">'
-      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/wheelchair:turning=no.png" /> '
-      + 'Wendefläche zu klein'
-      + '<div class="InfoBox nointend" id="turn.">Zuwenig Platz zum Wenden, müsste > 150×150cm sein.</div>'
-      + '</li>';
-    mapkey += '<li onClick="toggleInfoBox(\'ausw.\');">'
-      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/overtaking:wheelchair=no.png" /> '
-      + 'Fehlende Ausweichen'
-      + '<div class="InfoBox nointend" id="ausw.">Wenn der Weg schmaler als 1.8m ist, müsste alle 18m eine Ausweichstelle sein</div>'
-      + '</li>';
-    mapkey += '<li onClick="toggleInfoBox(\'traf.\');">'
+    mapkey += '<li onClick="toggleInfoBox(\'minimap.\');">'
       + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/traffic_signals:minimap=wrong.png" /> '
       + 'Taktile Minimap falsch'
-      + '<div class="InfoBox nointend" id="traf.">Falsche Taktile Karte bei Fußgängerampeln. Für Details siehe Text.</div>'
+      + '<div class="InfoBox nointend" id="minimap.">Taktile Karte Falsch/Veraltet</div>'
       + '</li>';
     mapkey += '<li onClick="toggleInfoBox(\'other.\');">'
       + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/unknown.png" /> '
