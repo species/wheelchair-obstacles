@@ -542,6 +542,7 @@ function getIconTag(tags) {
     return "";
 }
 
+/* overwrite this function in your custom html site! */
 function chooseIconSrc(tags,iconsize) {
 
   var icon_uri_start = assethost+"assets/poi-icons/" + overpass_config.icon_folder + "/" + iconsize + "/";
@@ -1743,7 +1744,10 @@ function loadPoi() {
       properties: {name: fillPopup(data.tags,data.type,data.id,centroid.lat,centroid.lon), style: style}
     });
 
-    return//  bindPopupOnData(centroid); //bind on centroid
+    if(data.tags && data.tags.image)
+      return bindPopupOnData(centroid);
+    else
+      return;
   }
   function relationFunction(data) {
     // calculate mean coordinates as center
