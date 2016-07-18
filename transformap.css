@@ -131,7 +131,6 @@ div.leaflet-popup-content { width: auto !important; }
     display:block;
     width:100%;
     text-align:right;
-    margin-top:-1.2em;
     padding:0 4px 0px 0;
     line-height:1.2em;
     text-shadow: 2px 2px 2px white ,-2px -2px 2px white, 2px -2px 2px white, -2px 2px 2px white;
