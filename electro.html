@@ -24,7 +24,7 @@
   <script src='L.Control.Locate.mine.js'></script>
 
   <script>
-    var url_pois_lz = "electro.json";
+    var url_pois_lz = "normal.json";
     var hostname = window.parent.document.location.origin ? window.parent.document.location.origin : window.parent.document.location.protocol + "//" + window.parent.document.location.hostname;
     var assethost = hostname + window.parent.document.location.pathname.replace(/\/[^/]*$/,'/');
   </script>
@@ -110,16 +110,11 @@ var different_maps = [
 
     overpass_query_ways = 'http://overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:BBOX];'+
     '(' +
-    'node["kerb"="raised"];'+ // ;<; include ways of kerbs too ... needed if we want to filter out kerbs from service
-    'node["kerb:height"];' +
-    'node["traffic_calming"];' +
-    'way[highway]["wheelchair"="no"];'+
-    'way[highway]["wheelchair"="limited"];'+
-    'way[width];'+
-    'way["wheelchair:turning"="no"];'+
-    'way[incline];'+
-    'way["incline:across"];' +
-    ');out body;>;out skel qt;' ;
+    'way[highway="pedestrian"];'+
+    'way[highway="footway"][surface];'+
+    'way[highway=cycleway]["foot"="yes"];' +
+    'way[highway=cycleway]["foot"="designated"];' +
+    ');out body qt;>;out body qt;' ;
 
     function node_should_be_displayed(tags) {
       if(!tags)
@@ -145,7 +140,8 @@ var different_maps = [
     }
     
     var red = "#FF0000",
-        yellow = "#FFF100";
+        yellow = "#FFF100",
+        green = "#06FF00";
 
     function getWayColorOrDontDisplay(tags) {
       if(!tags)
@@ -162,6 +158,9 @@ var different_maps = [
 
       if(tags["wheelchair"] == "no" || tags["wheelchair"] == "limited")
         return red;
+
+       if(tags["wheelchair"] == "yes" || tags["wheelchair"] == "designated")
+         return green;
 
       if(tags["access"] == "no" || tags["access"] == "private")
         return false;
@@ -187,7 +186,6 @@ var different_maps = [
             tmp_color = yellow;
           else
             return red;
-        // display green if <=6?
         }
       }
       if(tags["width"] && parseFloat(tags["width"]) < 0.9)
@@ -198,7 +196,7 @@ var different_maps = [
 
       if(tmp_color)
           return tmp_color;
-      return false;
+      return green;
     }
 
     overpass_query_rels = 'http://localhost/?data=BBOX';
