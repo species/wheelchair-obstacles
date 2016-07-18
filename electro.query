@@ -1,0 +1,13 @@
+[out:json][timeout:180][bbox:47.054306177697846,15.423002243041992,47.08251380123476,15.472612380981444];
+(
+node["kerb"="raised"];
+node["kerb:height"];
+node["traffic_calming"];
+way[highway]["wheelchair"="no"];
+way[highway]["wheelchair"="limited"];
+way[width];
+way["wheelchair:turning"="no"];
+way[incline];
+way["incline:across"];
+);
+out body;>;out skel qt;

@@ -1,0 +1,98 @@
+#content { box-sizing: border-box; }
+
+body, html {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  font-family: "PT Sans", sans-serif, 'DejaVu';
+  overflow:hidden;
+}
+body {
+  background-color:#FBFCFA;
+}
+
+nav a {
+  text-decoration: none;
+}
+
+#map {
+  height: 100%;
+  overflow: hidden;
+}
+
+.mmmnavbar {
+  font-size: 14px;
+  background: #455473;
+  box-shadow: #AAAAAA 0px 3px 5px 0px;
+  height: 50px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index:1005;
+  color:#FFF;
+  font: normal normal 400 14px/20px "PT Sans";
+  font-family: "PT Sans", sans-serif;
+  vertical-align:middle;
+  text-align:center;
+}
+
+.mmmnavbar li a {
+  color: #DDDDDD;
+  height:100%;
+  display:block;
+  line-height:50px;
+  padding-left:10px;
+  padding-right:10px;
+}
+.mmmnavbar li:first-child a {
+padding:0px;
+}
+
+
+.mmmnavbar a:hover {
+  text-decoration: none;
+  color:#FFF;
+}
+
+.mmmnavbar ul {
+	max-width:939px;
+	margin:0 0 0 -470px; 
+	padding:0;
+    position:absolute;
+    top:0px;
+    left:50%;
+    height:50px;
+}
+
+.mmmnavbar ul li {
+  display: inline;
+  float:left;
+  height:50px;
+  /*padding:10px;*/
+}
+.mmmnavbar ul li:first-child {
+    float:normal;
+}
+
+.mmmnavbar ul li img {
+	vertical-align:middle;
+	margin:10px;
+}
+
+.mmmnavbar ul li:hover {
+  background: #444;
+}
+
+#tmapcontent {
+  position: absolute;
+  top: 00px;
+  bottom: 0px;
+  left:0;
+  right:0;
+}
+
+.startpage {
+  padding:0 20px;
+}
+

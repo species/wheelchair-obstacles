@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wheelchair Barrier Map Athletic</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+  <link rel="stylesheet" href="leaflet-search.min.css" />
+  <link rel="stylesheet" href="transformap.css" />
+  <link rel="stylesheet" href="demomaps.css" />
+
+  <script src="//code.jquery.com/jquery-latest.min.js"></script>
+  <script src="jquery.geo-1.0.0-b1.5.min.js"></script>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+
+  <script src="PruneCluster.js"></script>
+
+  <script src="leaflet-hash.js"></script>
+  <script src="leaflet-search.min.js"></script>
+
+  <script src='L.Control.Locate.mine.js'></script>
+
+  <script>
+    var url_pois_lz = "normal.json"
+    var hostname = window.parent.document.location.origin ? window.parent.document.location.origin : window.parent.document.location.protocol + "//" + window.parent.document.location.hostname;
+    var assethost = hostname + window.parent.document.location.pathname.replace(/\/[^/]*$/,'/');
+  </script>
+
+<script src="sidebar.js"></script>
+<!--    <sc ript src="filters.js"></scri pt > -->
+  <script src="map.js"></script>
+  <script>
+var disableLoadPOI = true;
+
+var different_maps = [
+    { url : "http://mm.linuxtage.at/osm/routing/wheelchair-normal/" ,
+      name : "Routing Normal",
+      image: assethost+"assets/poi-icons/wheelchair/" + 24 + "/Wheelchair_Accessible.png"
+    }, 
+    { url : "http://mm.linuxtage.at/wheelchair-obstacles/normal.html" ,
+      name : "Barriers Normal",
+      image: assethost+"assets/poi-icons/wheelchair/" + 24 + "/kerb=raised.png"
+    },
+    { url : "http://mm.linuxtage.at/osm/routing/wheelchair-electro/" ,
+      name : "Routing Electro",
+      image: assethost+"assets/poi-icons/wheelchair/" + 24 + "/Wheelchair_Accessible.png"
+    },
+    { url : "http://mm.linuxtage.at/wheelchair-obstacles/electro.html" ,
+      name : "Barriers Electro",
+      image: assethost+"assets/poi-icons/wheelchair/" + 24 + "/kerb=raised.png"
+    },
+    { url : "http://mm.linuxtage.at/osm/routing/wheelchair-athletic/" ,
+      name : "Routing Athletic",
+      image: assethost+"assets/poi-icons/wheelchair/" + 24 + "/Wheelchair_Accessible.png"
+    },
+    { url : "http://mm.linuxtage.at/wheelchair-obstacles/athletic.html" ,
+      name : "Barriers Athletic",
+      image: assethost+"assets/poi-icons/wheelchair/" + 24 + "/kerb=raised.png"
+    },
+    { url : "http://mm.linuxtage.at/wheelchair-obstacles/traffic_signals.html" ,
+      name : "Traffic Signals Malfunctions",
+      image: assethost+"assets/poi-icons/wheelchair/" + 24 + "/traffic_signals:vibration=defect.png"
+    }
+];
+
+    /*
+     * overpass syntax:
+     * [out:json][timeout:180][bbox:BBOX];
+     * first OR-CLAUSE: node[param1][param2];out;(way[param1][param2];node(w));out;rel[param1][param2];out;
+     * n'th OR-Clause:  node[param3][param4];out;(way[param3][param4];node(w));out;rel[param3][param4];out;
+     *
+     * human readable length of query is not important, query speed is!
+     */
+    // var query_array = [ [ 'query1', "and-key2" ] , /*OR*/  ["and-key3", "and-key4" ] ]; // query may be all what goes inside [], e.g. '~"full?fill?s_needs:.*"~".*"' or 'addr:housenumber'
+    var overpass_config = {
+        q_array: [ [ '"wheelchair"~"limited|no"', '"kerb"' ], [ '"kerb"','"traffic_signals:minimap"="wrong"' ], ['"wheelchair"~"limited|no"','"highway"="footway"'],  ],
+        icon_folder : "wheelchair",
+        servers : [  "//overpass-api.de/api/", "http://overpass.osm.rambler.ru/cgi/", "http://overpass.osm.rambler.ru/cgi/" ],
+        icon_tags : [ "overtaking:wheelchair","wheelchair:turning","incline","incline:across","traffic_signals:minimap","width","kerb" ],
+        class_selector_key : { key: "image" }
+    }
+
+    buildOverpassQuery();
+
+    overpass_query_ways = 'http://overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:BBOX];'+
+    '(' +
+    'way[highway="pedestrian"];'+
+    'way[highway="footway"][surface];'+
+    'way[highway=cycleway]["foot"="yes"];' +
+    'way[highway=cycleway]["foot"="designated"];' +
+    ');out body;>;out skel qt;' ;
+
+    function node_should_be_displayed(tags) {
+      if(!tags)
+        return false;
+      if(tags["traffic_calming"]) {
+        if(tags["wheelchair"] == "no" || tags["wheelchair"] == "limited")
+          return true;
+        else
+          return false;
+      }
+      if(tags["kerb"]) {
+        if(tags["kerb:height"]) {
+          var kerb_height = (tags["kerb:height"].match(/cm$/)) ? parseFloat(tags["kerb:height"])/100 : parseFloat(tags["kerb:height"]);
+          if(kerb_height <= 0.08)
+            return false;
+          else
+            return true;
+        }
+        if(tags["kerb"] == "raised")
+          return true;
+      }
+      return false;
+    }
+    
+    var red = "#FF0000",
+        yellow = "#FFF100",
+        green = "#06FF00";
+
+    function getWayColorOrDontDisplay(tags) {
+      if(!tags)
+        return false;
+
+      if(!tags["highway"])
+        return false;
+
+      if(tags["indoor"] == "yes")
+        return false;
+
+      if(tags["wheelchair"] == "no")
+        return red;
+
+      if(tags["access"] == "no" || tags["access"] == "private")
+        return false;
+
+      if(tags["wheelchair"] == "yes" || tags["wheelchair"] == "designated")
+        return green;
+
+      var tmp_color = "";
+
+      if(tags["incline"]) {
+        var incline;
+        if (tags["incline"].match(/%$/) || parseFloat(tags["incline"]) == 0)
+          incline = Math.abs(parseFloat(tags["incline"]));
+        else
+          return red; //up and down and all unknown
+
+        if(incline > 6) {
+          if(incline <= 12 && incline > 6 )
+            tmp_color = yellow;
+          else
+            return red;
+        }
+        // display green if <=3?
+      }
+      if(tags["incline:across"] && tags["incline:across"].match(/%$/)) {
+        var incline = Math.abs(parseFloat(tags["incline:across"]));
+        if(incline > 12) {
+          if(tags["wheelchair"] && (tags["wheelchair"] == "yes" || tags["wheelchair"] == "designated"))
+            tmp_color = yellow;
+          else
+            return red;
+        }
+      }
+      if(tags["width"] && parseFloat(tags["width"]) < 0.7)
+          return red;
+
+      if(tags["overtaking:wheelchair"] && tags["overtaking:wheelchair"] == "no")
+        tmp_color = yellow;
+
+      if(tmp_color)
+          return tmp_color;
+      return green;
+    }
+
+    overpass_query_rels = 'http://localhost/?data=BBOX';
+//    overpass_query_ways = 'http://localhost/?data=BBOX';
+
+   var about_text = '<p>This map displays OpenStreetMap objects relevant for wheelchair routing.</p>'
+        + about.overpass
+        + about.export_opendata ; 
+
+    var mapkey = '<li onClick="toggleInfoBox(\'steig-red.\');">'
+      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/incline_up_red.png" /> '
+      + 'Hohe Steigung ab 6%'
+      + '<div class="InfoBox nointend" id="steig-red.">Steigungen &gt; 6%</div>'
+      + '</li>';
+    mapkey += '<li onClick="toggleInfoBox(\'steig-y.\');">'
+      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/incline_up_orange.png" /> '
+      + 'Mittlere Steigung bis 6%'
+      + '<div class="InfoBox nointend" id="steig-y.">Steigungen bis 6%</div>'
+      + '</li>';
+    mapkey += '<li onClick="toggleInfoBox(\'steig-q.\');">'
+      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/incline_across-right_red.png" /> '
+      + 'Hohe Querneigung'
+      + '<div class="InfoBox nointend" id="steig-q.">Hohe Querneigungen ab 6%</div>'
+      + '</li>';
+    mapkey += '<li onClick="toggleInfoBox(\'schmal.\');">'
+      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/width-bad.png" /> '
+      + 'Engstelle'
+      + '<div class="InfoBox nointend" id="schmal.">Engstellen, meistens &lt; 90cm</div>'
+      + '</li>';
+    mapkey += '<li onClick="toggleInfoBox(\'hoch.\');">'
+      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/kerb=raised.png" /> '
+      + 'Kante &gt; 3cm'
+      + '<div class="InfoBox nointend" id="hoch.">Gehsteigkanten &gt; 3cm</div>'
+      + '</li>';
+    mapkey += '<li onClick="toggleInfoBox(\'turn.\');">'
+      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/wheelchair:turning=no.png" /> '
+      + 'Wendefläche zu klein'
+      + '<div class="InfoBox nointend" id="turn.">Zuwenig Platz zum Wenden, müsste > 150×150cm sein.</div>'
+      + '</li>';
+    mapkey += '<li onClick="toggleInfoBox(\'ausw.\');">'
+      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/overtaking:wheelchair=no.png" /> '
+      + 'Fehlende Ausweichen'
+      + '<div class="InfoBox nointend" id="ausw.">Wenn der Weg schmaler als 1.8m ist, müsste alle 18m eine Ausweichstelle sein</div>'
+      + '</li>';
+    mapkey += '<li onClick="toggleInfoBox(\'other.\');">'
+      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/unknown.png" /> '
+      + 'Sonstige'
+      + '<div class="InfoBox nointend" id="other.">Alles was in keine andere Kategorie passt.</div>'
+      + '</li>';
+    mapkey += '<li onClick="toggleInfoBox(\'photo.\');">'
+      + '<img src="'+assethost+'assets/poi-icons/wheelchair/24/unknown.png" style="background:blue"/> '
+      + 'Blau: Foto'
+      + '<div class="InfoBox nointend" id="photo.">Bei allen Icons mit Blauem Hintergrund gibt es ein Bild zur Veranschaulichung im Popup.</div>'
+      + '</li>';
+
+    $(function () {
+
+      var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: [attr.osm, attr.osm_tiles, attr.overpass, attr.greenmap].join(', '),
+        maxZoom : 20,
+        maxNativeZoom: 19,
+        noWrap: true
+      });
+      var base_maps = {
+        'OpenSteetMap - Mapnik': osm
+      };
+
+
+      map = initMap(osm, base_maps, null, 47.06586,  15.45, 16);
+
+      var hash = new L.Hash(map); // Leaflet persistent Url Hash function
+
+      setTimeout(loadPoi,2000);
+//      map.on('moveend', loadPoi);
+//      map.on('viewreset', loadPoi);
+
+      setTimeout(addSearch,500); //seems to break with prunecluster when loaded instantly, this fix helps
+      addLocate();
+      L.control.scale({imperial: false}).addTo(map);
+      L.control.mousePosition().addTo(map);
+
+    });
+
+  </script>
+  <!--[if lte IE 8]><link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.ie.css" /><![endif]-->
+</head>
+<body class="marker-backgroundless">
+    <!--
+<nav class="mmmnavbar">
+<ul>
+  <li id="mmmnavtitle" class="mmmactive">
+  <a href="http://transformap.co"><img src=logo_white.png height=30px></a>
+  </li>
+  <li>
+  <a href="http://transformap.co">Overview</a>
+  </li>
+  <li>
+  <a href="http://discourse.transformap.co">Forum</a>
+  </li>
+  <li>
+  <a href="http://blog.14mmm.org">Activities</a>
+  </li>
+  <li class=last>
+  <a href="http://transformap.co/about">About</a>
+  </li>
+</ul>
+</nav>
+    -->
+<noscript>
+  <br><hr><br>
+  <h3>Thanks for your privacy-awareness and disabled JavaScript!</h3>
+  <p>Unfortunately, this interactive map only works with JavaScript enabled - please add an exception for transformap.co!</p>
+</noscript>
+
+<div id="tmapcontent">
+  <div id="map"></div>
+</div>
+
+</body>
+</html>
