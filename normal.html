@@ -24,6 +24,7 @@
   <script src='L.Control.Locate.mine.js'></script>
 
   <script>
+    var url_pois_lz = "normal.json"
     var hostname = window.parent.document.location.origin ? window.parent.document.location.origin : window.parent.document.location.protocol + "//" + window.parent.document.location.hostname;
     var assethost = hostname + window.parent.document.location.pathname.replace(/\/[^/]*$/,'/');
   </script>
@@ -32,6 +33,7 @@
 <!--    <sc ript src="filters.js"></scri pt > -->
   <script src="map.js"></script>
   <script>
+var disableLoadPOI = true;
 
 var different_maps = [
     { url : "http://mm.linuxtage.at/osm/routing/wheelchair-normal/" ,
