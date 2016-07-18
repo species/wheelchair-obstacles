@@ -40,7 +40,7 @@ var different_maps = [
       name : "Routing Normal",
       image: assethost+"assets/poi-icons/wheelchair/" + 24 + "/Wheelchair_Accessible.png"
     }, 
-    { url : "http://mm.linuxtage.at/wheelchair-obstacles/normal.html" ,
+    { url : "normal.html" ,
       name : "Barriers Normal",
       image: assethost+"assets/poi-icons/wheelchair/" + 24 + "/kerb=raised.png"
     },
@@ -48,7 +48,7 @@ var different_maps = [
       name : "Routing Electro",
       image: assethost+"assets/poi-icons/wheelchair/" + 24 + "/Wheelchair_Accessible.png"
     },
-    { url : "http://mm.linuxtage.at/wheelchair-obstacles/electro.html" ,
+    { url : "electro.html" ,
       name : "Barriers Electro",
       image: assethost+"assets/poi-icons/wheelchair/" + 24 + "/kerb=raised.png"
     },
@@ -56,11 +56,11 @@ var different_maps = [
       name : "Routing Athletic",
       image: assethost+"assets/poi-icons/wheelchair/" + 24 + "/Wheelchair_Accessible.png"
     },
-    { url : "http://mm.linuxtage.at/wheelchair-obstacles/athletic.html" ,
+    { url : "athletic.html" ,
       name : "Barriers Athletic",
       image: assethost+"assets/poi-icons/wheelchair/" + 24 + "/kerb=raised.png"
     },
-    { url : "http://mm.linuxtage.at/wheelchair-obstacles/traffic_signals.html" ,
+    { url : "traffic_signals.html" ,
       name : "Traffic Signals Malfunctions",
       image: assethost+"assets/poi-icons/wheelchair/" + 24 + "/traffic_signals:vibration=defect.png"
     }
@@ -84,6 +84,7 @@ var different_maps = [
     }
 
     buildOverpassQuery();
+<<<<<<< HEAD
  //   overpass_query_nodes = '//overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:BBOX];node["wheelchair"~"limited|no"]["kerb"];out;node["kerb"]["traffic_signals:minimap"="wrong"];out;';
  //   overpass_query_nodes = 'http://api.openstreetmap.fr/oapi/interpreter?data=[out:json][timeout:180][bbox:47.056,15.4425287,47.0796206,15.473];node["wheelchair"~"limited|no"]["kerb"];out;node["kerb"]["traffic_signals:minimap"="wrong"];out;node["kerb"]["image"];out;';
 //    overpass_query_nodes = 'http://overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:BBOX];node["wheelchair"~"limited|no"]["kerb"];out;node["traffic_signals:minimap"="wrong"];out;node["kerb"]["image"];out;';
@@ -107,6 +108,8 @@ var different_maps = [
     '(way["wheelchair:turning"="no"];node(w));out;'+
     '(way[incline]["highway"~"^(footway|cycleway|service|path)$"]["incline"!~"^-?([0-3]|[012][.][0-9]*) ?%$|^0$"]["wheelchair"!~"^(yes|designated)$"];node(w));out;'+
     '(way["incline:across"]["incline:across"!~"^-?([0-6]|[012345][.][0-9]*) ?%$|^0$"];node(w));out;';
+=======
+>>>>>>> master
 
     overpass_query_ways = 'http://overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:BBOX];'+
     '(' +
