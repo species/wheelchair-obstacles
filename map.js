@@ -32,7 +32,7 @@ for(var i = 0; i < language.length; i++) {
     }
 }
 
-console.log(language);
+//console.log(language);
 
 // global texts
 var attr = {
@@ -1205,7 +1205,7 @@ function getMainTags(tags) {
                 object_tags.push(key + "=" + value);
         }
     }
-    console.log(object_tags);
+    //console.log(object_tags);
     return object_tags;
 }
 
@@ -1224,7 +1224,7 @@ function loadPoi() {
     }
 
     if(pois_lz) { 
-      console.log(pois_lz);
+      //console.log(pois_lz);
       console.log("adding lz POIs");
 
       //changeLoadingIndicator("loading_node",+1);
@@ -1301,10 +1301,7 @@ function loadPoi() {
     var tags_to_ignore = [ "name" , "ref", "addr:street", "addr:housenumber", "addr:postcode", "addr:city", "addr:suburb", "addr:country","website","url","contact:website","contact:url","email","contact:email","phone","contact:phone","fax","contact:fax","created_by","area","layer","room","indoor","twitter","contact:twitter","link:twitter", "contact:google_plus", "google_plus", "link:google_plus", "contact:facebook","facebook","link:facebook","facebook:page","website:facebook","url:facebook","contact:youtube","youtube","link:youtube","wheelchair","wikipedia","wikidata","image","source","lit","segregated","motor_vehicle" ];
     var tags_to_ignore = [ "name" ]; 
 
-    var r = $('<table>');
-
-
-    var r = $('<table>');
+    var content = '<table>';
 
     var href = location.href.replace(/#.*$/,'').replace(/[&?]popup=(node|way|relation)[0-9]+/,'');
     var hasQuery = href.indexOf("?") + 1;
@@ -1312,16 +1309,21 @@ function loadPoi() {
 
     var popup_href =  href + appendix + '#' + map.getZoom() + '/' + lat + '/' + lon;
 
-    r.append($('<tr>')
+/*    r.append($('<tr>')
             .attr('class','header')
             .append($('<td>').append('<a href="' + popup_href + '" title="Link to this POI on this map">Permalink</a>'))
-            .append($('<td>').append('<a href="http://editor.transformap.co/#background=Bing&id=' + type.substring(0,1) + id + '&map=19/' + lon + '/' + lat + '" title="Edit this object with iD for TransforMap" target=_blank>Edit</a>'))
-        );
-    r.append($('<tr>')
-            .attr('class','header')
+//            .append($('<td>').append('<a href="http://editor.transformap.co/#background=Bing&id=' + type.substring(0,1) + id + '&map=19/' + lon + '/' + lat + '" title="Edit this object with iD for TransforMap" target=_blank>Edit</a>'))
+//        );
+//    r.append($('<tr>')
+//            .attr('class','header')
             .append($('<td>').append('<a href="https://www.openstreetmap.org/' + type + "/" + id + '" title="Link to ' + type + ' ' + id + ' on OpenStreetMap" target=_blank><img src="'+assethost+'assets/20px-Mf_' + type + '.svg.png" />' + type.substring(0,1) + id + '</a>'))
-            .append($('<td>').append('<a href="http://map.project-osrm.org/?dest=' + lat + ',' + lon + '&destname=' + tags['name'] + '" target=_blank title="Route here with OSRM">Route Here</a>'))
-        );
+//            .append($('<td>').append('<a href="http://map.project-osrm.org/?dest=' + lat + ',' + lon + '&destname=' + tags['name'] + '" target=_blank title="Route here with OSRM">Route Here</a>'))
+        );*/
+    
+        '<td><a href="' + popup_href + '" title="Link to this POI on this map">Permalink</a></td>'+
+        '<td><a href="https://www.openstreetmap.org/' + type + "/" + id + '" title="Link to ' + type + ' ' + id + ' on OpenStreetMap" target=_blank><img src="'+assethost+'assets/20px-Mf_' + type + '.svg.png" />' + type.substring(0,1) + id + '</a></td>'+
+        '</tr>';
+      
     var wikipedia_link = "";
 
     function addSocialMediaLinks(tags) {
@@ -1372,7 +1374,7 @@ function loadPoi() {
 
     var social_media_links = "";//addSocialMediaLinks(tags);
 
-    if(tags["addr:street"] || tags["addr:housenumber"] || tags["addr:postcode"] || tags["addr:city"] || tags["addr:suburb"] || tags["addr:country"]
+  /*   if(tags["addr:street"] || tags["addr:housenumber"] || tags["addr:postcode"] || tags["addr:city"] || tags["addr:suburb"] || tags["addr:country"]
             || tags["website"] || tags["url"] || tags["contact:website"] || tags["contact:url"] || tags["email"] || tags["contact:email"]
             || tags["phone"] || tags["contact:phone"] || tags["fax"] || tags["contact:fax"] || tags["wheelchair"] || social_media_links) {
         r.append($('<tr>')
@@ -1412,9 +1414,9 @@ function loadPoi() {
             social_media_links
 
           )));
-    }
+    } */
     var wp_articlename = "";
-    for (key in tags) {
+    /*for (key in tags) {
         if(/^wikipedia/.test(key)) {
             var value = tags[key];
             var lang = key.match(/^(?:wikipedia:)([a-z-]{2,7})$/) || value.match(/^([a-z-]{2,7}):/) || ""; 
@@ -1454,7 +1456,7 @@ function loadPoi() {
                     );
 
         }
-    }
+    }*/
     if(tags['image']) {
         if(tags['image'].match(/^File:/)) {
             var imagename = tags['image'].replace(/ /,"_");
@@ -1480,20 +1482,17 @@ function loadPoi() {
                 setTimeout(setImageInPopup,100); //needed here too if site called with popup open
             });
 
-            r.append($('<tr>')
-                    .attr('class','header')
-                    .append("<td colspan=2 id='wp-image'><a href='https://commons.wikimedia.org/wiki/" + imagename + "' target=_blank><img id='" + imagename + "' title='" + imagename + "'/> © Wikimedia Commons</a></td>" )
-                        // FIXME attribution/License must be set on return of call
-                    );
-
+            content += '<tr class=header>'+
+              "<td colspan=2 id='wp-image'><a href='https://commons.wikimedia.org/wiki/" + imagename + "' target=_blank><img id='" + imagename + "' title='" + imagename + "'/> © Wikimedia Commons</a></td>"+
+              "</tr>";
 
         }
-        else if( ! (wp_articlename && tags['image'].match(/wiki(pedia|media)/)) ) {
+      /*  else if( ! (wp_articlename && tags['image'].match(/wiki(pedia|media)/)) ) {
             r.append($('<tr>')
                     .attr('class','header')
                     .append("<td colspan=2 id='image'><img src='" + tags['image'] + "' style='width:276px;' /></td>" )//only one popup shall be open at a time for the id to be unique
                 );
-        }
+        }*/
     }
 
 
@@ -1503,7 +1502,7 @@ function loadPoi() {
       if ( tags_to_ignore.indexOf(key) >= 0) 
         continue;
 
-      if ( key == 'website' || key == 'url' || key == 'contact:website' ||  key == 'contact:url') { 
+      /*if ( key == 'website' || key == 'url' || key == 'contact:website' ||  key == 'contact:url') { 
         var teststr=/^http/; //http[s] is implicit here
         if ( ! teststr.test(value) )
           value = "http://" + value;
@@ -1532,7 +1531,7 @@ function loadPoi() {
         var value_escaped = secHTML(value);
 
         var keytext = key_escaped.replace(/:/g,":<wbr />");
-        var valuetext = "<span>=&nbsp;</span>" + value_escaped.replace(/;/g,"; ");
+        var valuetext = "<span>=&nbsp;</span>" + value_escaped.replace(/;/g,"; "); */
 
         /* display label:* instead of key */ 
         /*
@@ -1555,18 +1554,14 @@ function loadPoi() {
         } 
         */
 
-        r.append($('<tr>').addClass('tag')
-            .append($('<th>').append(keytext))
-            .append($('<td>').append(valuetext))
-            );
-      }
+        content += '<tr class=tag>'+
+            '<th>' + key + '</th>'+
+            '<td><span>=&nbsp;</span>' + value + '</td>'+
+            '</tr>';
+            
+      //}
 
     } // end for (key in tags)
-
-    var s = $('<div>');
-    s.append(r);
-    var retval = $('<div>').append(s);
-
     var object_tags = getMainTags(tags),
         object_text = "unknown feature";
 
@@ -1578,18 +1573,14 @@ function loadPoi() {
         object_text = object_tags.join(", ");
     }
 
-    retval.prepend($('<h3>')
-            .attr("translated","untranslated")
-            .attr("title", (object_text == "unknown feature") ? "This Object has no known OSM tag set" : object_text )
-            .attr("sourcetext", object_text )
-            .append($("<span>")
-                .text(object_text))
-            .append($("<span>")
-                .text("?")
-                .attr("title","Click here to show where this value comes from"))
-                    );
-    retval.prepend($('<h1>').text(tags["name"]));
-    return retval.html();
+    content += "</table>";
+
+    var header = "<h1>" + tags["name"] + "</h1>" +
+      "<h3 translated=untranslated title='" + ( (object_text == "unknown feature") ? "This Object has no known OSM tag set" : object_text) + "' sourcetext='" + object_text + "' >"+
+      "<span>"+object_text+"</span>"+
+      "</h3>";
+
+    return  header + "<div>" + content + "</div>";
   }
 
   function bindPopupOnData(data) {
@@ -2191,7 +2182,7 @@ if (window.url_pois_lz) { //TODO: must be called after map pois_lz set ... but h
   var http_request_lz = new XMLHttpRequest();
   http_request_lz.open("GET", url_pois_lz, true);
   http_request_lz.onreadystatechange = function () {
-        console.log(http_request_lz);
+        //console.log(http_request_lz);
         var done = 4, ok = 200, not_modified = 304;
         if (http_request_lz.readyState === done && (http_request_lz.status === ok || http_request_lz.status === not_modified )) {
             pois_lz = JSON.parse(http_request_lz.responseText);
