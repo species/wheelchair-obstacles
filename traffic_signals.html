@@ -249,7 +249,7 @@ var different_maps = [
       var hash = new L.Hash(map); // Leaflet persistent Url Hash function
 
       setTimeout(loadPoi,2000);
-//      map.on('moveend', loadPoi);
+      map.on('moveend', loadPoi);
 //      map.on('viewreset', loadPoi);
 
       setTimeout(addSearch,500); //seems to break with prunecluster when loaded instantly, this fix helps
