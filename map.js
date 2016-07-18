@@ -1745,7 +1745,7 @@ function loadPoi() {
       properties: {name: fillPopup(data.tags,data.type,data.id,centroid.lat,centroid.lon), style: style}
     });
 
-    if(data.tags && data.tags.image)
+    if(data.tags && data.tags.image && !(data.tags.area && data.tags.area == "yes"))
       return bindPopupOnData(centroid);
     else
       return;
