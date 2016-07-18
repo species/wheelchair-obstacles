@@ -84,39 +84,13 @@ var different_maps = [
     }
 
     buildOverpassQuery();
- //   overpass_query_nodes = '//overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:BBOX];node["wheelchair"~"limited|no"]["kerb"];out;node["kerb"]["traffic_signals:minimap"="wrong"];out;';
- //   overpass_query_nodes = 'http://api.openstreetmap.fr/oapi/interpreter?data=[out:json][timeout:180][bbox:47.056,15.4425287,47.0796206,15.473];node["wheelchair"~"limited|no"]["kerb"];out;node["kerb"]["traffic_signals:minimap"="wrong"];out;node["kerb"]["image"];out;';
-//    overpass_query_nodes = 'http://overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:BBOX];node["wheelchair"~"limited|no"]["kerb"];out;node["traffic_signals:minimap"="wrong"];out;node["kerb"]["image"];out;';
-//    overpass_query_nodes = 'http://overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:BBOX];node["kerb"="raised"];out;node["kerb:height"]["kerb:height"!~"^(0|0\.[0-9]*|1|1\.[0-9]*|2|2\.[0-9]*|3) ?cm$|^0$"];out;node["traffic_signals:minimap"="wrong"];out;node["wheelchair"~"limited|no"]["traffic_calming"];out;';
-    overpass_query_nodes = 'http://overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:BBOX];'+
-    'node["kerb"="raised"];out;'+
-    'node["kerb:height"]["kerb:height"!~"^([0-3]|[012][.][0-9]*) ?cm$|^0$"];out;'+
-    'node["traffic_signals:minimap"="wrong"];out;'+
-    'node["traffic_calming"]["wheelchair"~"limited|no"];out;';
-    overpass_query_nodes = 'http://localhost/?data=BBOX';
-
-    // higher than 3 cm, or !height and raised
- //   overpass_query_ways = 'http://overpass.osm.rambler.ru/cgi/interpreter?data=[out:json][timeout:180][bbox:BBOX];(way["wheelchair"~"limited|no"]["highway"~"footway|cycleway|service"];node(w));out;';
-
-    overpass_query_ways = 'http://overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:BBOX];'+
-    'node["kerb"="raised"];out;'+
-    'node["kerb:height"]["kerb:height"!~"^([0-3]|[012][.][0-9]*) ?cm$|^0$"];out;'+
-    'node["traffic_calming"]["wheelchair"~"limited|no"];out;' + 
-    '(way["wheelchair"~"^(limited|no)$"]["highway"~"^(footway|cycleway|service|path)$"];node(w));out;'+
-    '(way["overtaking:wheelchair"="no"];node(w));out;'+ // is only set on ways with 'width'-tag
-    '(way["wheelchair:turning"="no"];node(w));out;'+
-    '(way[incline]["highway"~"^(footway|cycleway|service|path)$"]["incline"!~"^-?([0-3]|[012][.][0-9]*) ?%$|^0$"]["wheelchair"!~"^(yes|designated)$"];node(w));out;'+
-    '(way["incline:across"]["incline:across"!~"^-?([0-6]|[012345][.][0-9]*) ?%$|^0$"];node(w));out;';
 
     overpass_query_ways = 'http://overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:BBOX];'+
     '(' +
-    'node["kerb"="raised"];'+ // ;<; include ways of kerbs too ... needed if we want to filter out kerbs from service
-    'node["kerb:height"];' +
-    'node["traffic_calming"];' +
-    'way[highway]["wheelchair"="no"];'+
-    'way[width];'+
-    'way[incline];'+
-    'way["incline:across"];' +
+    'way[highway="pedestrian"];'+
+    'way[highway="footway"][surface];'+
+    'way[highway=cycleway]["foot"="yes"];' +
+    'way[highway=cycleway]["foot"="designated"];' +
     ');out body;>;out skel qt;' ;
 
     function node_should_be_displayed(tags) {
