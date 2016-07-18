@@ -119,6 +119,7 @@ div.leaflet-popup-content { width: auto !important; }
 .leaflet-popup-content div table tr.header td img.wheelchair.no { border-radius:3px; border:1px solid black; background: #E95A61;}
 .leaflet-popup-content div table tr.header td img.wheelchair.limited { border-radius:3px; border:1px solid black; background: yellow;}
 .leaflet-popup-content div table tr.header td img.wheelchair.yes { border-radius:3px; border:1px solid black; background: #8DD060;}
+.leaflet-popup-content div table tr.header td img.wheelchair.designated { border-radius:3px; border:1px solid black; background: #8DD060;}
 
 .leaflet-popup-content div { max-height: 400px; overflow:auto; margin-right:-18px;padding-right:18px; }
 
@@ -690,6 +691,7 @@ Copyright (c) 2014 SINTEF-9012
 .prunecluster-small {
 	background-color: #b5e28c;
 	background-color: rgba(181, 226, 140, 0.6);
+	background-color: rgba(253, 156, 115, 0.6);
 }
 
 .prunecluster-small div {
@@ -697,6 +699,7 @@ Copyright (c) 2014 SINTEF-9012
 	height: 28px;
 	background-color: #6ecc39;
 	background-color: rgba(110, 204, 57, 0.6);
+	background-color: rgba(241, 128, 23, 0.6);
 }
 
 .prunecluster-small div span {
