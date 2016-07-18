@@ -24,7 +24,7 @@
   <script src='L.Control.Locate.mine.js'></script>
 
   <script>
-    var url_pois_lz = "athletic.json"
+    var url_pois_lz = "normal.json"
     var hostname = window.parent.document.location.origin ? window.parent.document.location.origin : window.parent.document.location.protocol + "//" + window.parent.document.location.hostname;
     var assethost = hostname + window.parent.document.location.pathname.replace(/\/[^/]*$/,'/');
   </script>
@@ -143,7 +143,8 @@ var different_maps = [
     }
     
     var red = "#FF0000",
-        yellow = "#FFF100";
+        yellow = "#FFF100",
+        green = "#06FF00";
 
     function getWayColorOrDontDisplay(tags) {
       if(!tags)
@@ -160,6 +161,9 @@ var different_maps = [
 
       if(tags["access"] == "no" || tags["access"] == "private")
         return false;
+
+      if(tags["wheelchair"] == "yes" || tags["wheelchair"] == "designated")
+        return green;
 
       var tmp_color = "";
 
@@ -185,7 +189,6 @@ var different_maps = [
             tmp_color = yellow;
           else
             return red;
-        // display green if <=6?
         }
       }
       if(tags["width"] && parseFloat(tags["width"]) < 0.7)
@@ -196,7 +199,7 @@ var different_maps = [
 
       if(tmp_color)
           return tmp_color;
-      return false;
+      return green;
     }
 
     overpass_query_rels = 'http://localhost/?data=BBOX';
