@@ -110,15 +110,11 @@ var different_maps = [
 
     overpass_query_ways = 'http://overpass-api.de/api/interpreter?data=[out:json][timeout:180][bbox:BBOX];'+
     '(' +
-    'node["kerb"="raised"];'+ // ;<; include ways of kerbs too ... needed if we want to filter out kerbs from service
-    'node["kerb:height"];' +
-    'node["traffic_calming"];' +
-    'way[highway]["wheelchair"="no"];'+
-    'way[highway]["wheelchair"="limited"];'+
-    'way[width];'+
-    'way[incline];'+
-    'way["incline:across"];' +
-    ');out body;>;out skel qt;' ;
+    'way[highway="pedestrian"];'+
+    'way[highway="footway"][surface];'+
+    'way[highway=cycleway]["foot"="yes"];' +
+    'way[highway=cycleway]["foot"="designated"];' +
+    ');out body qt;>;out body qt;' ;
 
     function node_should_be_displayed(tags) {
       if(!tags)
@@ -144,7 +140,8 @@ var different_maps = [
     }
     
     var red = "#FF0000",
-        yellow = "#FFF100";
+        yellow = "#FFBF00",
+        green = "#06FF00";
 
     function getWayColorOrDontDisplay(tags) {
       if(!tags)
@@ -158,6 +155,9 @@ var different_maps = [
 
       if(tags["wheelchair"] == "no" || tags["wheelchair"] == "limited")
         return red;
+
+      if(tags["wheelchair"] == "yes" || tags["wheelchair"] == "designated")
+        return green;
 
       if(tags["access"] == "no" || tags["access"] == "private")
         return false;
@@ -197,7 +197,7 @@ var different_maps = [
 
       if(tmp_color)
           return tmp_color;
-      return false;
+      return green;
     }
 
     overpass_query_rels = 'http://localhost/?data=BBOX';
