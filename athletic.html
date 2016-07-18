@@ -152,7 +152,13 @@ var different_maps = [
       if(!tags["highway"])
         return false;
 
-      if(tags["indoor"] && tags["indoor"] == "yes")
+      if(tags["indoor"] == "yes")
+        return false;
+
+      if(tags["wheelchair"] == "no")
+        return red;
+
+      if(tags["access"] == "no" || tags["access"] == "private")
         return false;
 
       var tmp_color = "";

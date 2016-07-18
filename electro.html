@@ -157,7 +157,13 @@ var different_maps = [
       if(tags["wheelchair:turning"] && tags["wheelchair:turning"] == "no")
         return red;
 
-      if(tags["indoor"] && tags["indoor"] == "yes")
+      if(tags["indoor"] == "yes")
+        return false;
+
+      if(tags["wheelchair"] == "no" || tags["wheelchair"] == "limited")
+        return red;
+
+      if(tags["access"] == "no" || tags["access"] == "private")
         return false;
 
       var tmp_color = "";
