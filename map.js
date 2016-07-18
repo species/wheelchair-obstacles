@@ -202,7 +202,7 @@ var overpass_ql_text,
     overpass_query_nodes,
     overpass_query_ways,
     overpass_query_rels,
-    object_type_keys = [ "amenity", "shop", "tourism", "craft", "garden:type", "leisure", "office", "man_made", "landuse", "club", "farm_boxes", "barrier", "footway","highway" ] ;
+    object_type_keys = [ "amenity", "shop", "tourism", "craft", "garden:type", "leisure", "office", "man_made", "landuse", "club", "farm_boxes", "barrier", "footway","highway","traffic_calming" ] ;
 
 /*
  * sets global the vars above
