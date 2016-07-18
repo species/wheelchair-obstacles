@@ -225,7 +225,7 @@ body.ie #notificationbar {
 }
 
 #tmap_sidebar .box.shown #mapswitcher {
-    max-height:200px;
+    max-height:250px;
 }
 #tmap_sidebar .box.shown #about {
     max-height:500px;
