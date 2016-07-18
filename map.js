@@ -1212,7 +1212,7 @@ function getMainTags(tags) {
 function loadPoi() {
 
   var notificationbar =  document.getElementById("notificationbar");
-  if (map.getZoom() < overpass_config.minzoom ) {
+  if (( map.getZoom() < overpass_config.minzoom ) || (pois_lz && !on_start_loaded)){
     notificationbar.style.display = "block";
     if(on_start_loaded && window.createSideBar) {
       var json_date = new Date(pois_lz.osm3s.timestamp_osm_base);
@@ -1227,14 +1227,14 @@ function loadPoi() {
       console.log(pois_lz);
       console.log("adding lz POIs");
 
-      changeLoadingIndicator("loading_node",+1);
-      handleNodes(pois_lz); 
+      //changeLoadingIndicator("loading_node",+1);
+      //handleNodes(pois_lz);
 
       changeLoadingIndicator("loading_way",+1);
       handleWays(pois_lz); 
 
-      changeLoadingIndicator("loading_relation",+1);
-      handleRelations(pois_lz); 
+      //changeLoadingIndicator("loading_relation",+1);
+      //handleRelations(pois_lz);
 
       if(window.createSideBar) {
           var json_date = new Date(pois_lz.osm3s.timestamp_osm_base);
@@ -1245,6 +1245,7 @@ function loadPoi() {
       }
 
       on_start_loaded = 1;
+      notificationbar.style.display = "none";
     }
 
     return;
@@ -2190,8 +2191,9 @@ if (window.url_pois_lz) { //TODO: must be called after map pois_lz set ... but h
   var http_request_lz = new XMLHttpRequest();
   http_request_lz.open("GET", url_pois_lz, true);
   http_request_lz.onreadystatechange = function () {
-        var done = 4, ok = 200;
-        if (http_request_lz.readyState === done && http_request_lz.status === ok) {
+        console.log(http_request_lz);
+        var done = 4, ok = 200, not_modified = 304;
+        if (http_request_lz.readyState === done && (http_request_lz.status === ok || http_request_lz.status === not_modified )) {
             pois_lz = JSON.parse(http_request_lz.responseText);
             loadPoi();
         }
