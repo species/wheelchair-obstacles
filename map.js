@@ -355,7 +355,6 @@ function initMap(defaultlayer,base_maps,overlay_maps,lat,lon,zoom) {
   $('#map').append('<div id="notificationbar">Please zoom in to update POIs!</div>');
 
   map.on('moveend', updateLinks);
-  map.on('popupopen', setImageInPopup);
   map.on('popupopen', setTranslationsInPopup);
 
   var popup_param = getUrlVars()["popup"];
@@ -386,34 +385,6 @@ function getUrlVars() {
         vars[key] = value.replace(/#.*$/,'');
     });
     return vars;
-}
-
-function setImageInPopup(obj) {
-//    console.log("setImageInPopup: called");
-    if(!document.getElementById('wp-image')) {
-//        console.log("setImageInPopup: no wp-image");
-        return;
-    }
-    if ($('#wp-image img').attr('src')) {
-//        console.log("setImageInPopup: src already set");
-        return;
-    }
-    var img = $('#wp-image img');
-    var source = wikipedia_images["wpimage_" + img.attr('title')];
-
-    if(!source) {
-        $('#wp-image').css('display','none');
-//        console.log("setImageInPopup: no answer for item yet");
-        return;
-    }
-    if ( source == "UNDEF") {
-        $('#wp-image').css('display','none');
-//        console.log("setImageInPopup: no image on wikipedia");
-        return;
-    }
-//    console.log("setImageInPopup: setting src " + source);
-    $('#wp-image').css('display','table-cell');
-    img.attr('src', source);
 }
 
 function setTranslationsInPopup(obj) {
@@ -1437,7 +1408,6 @@ function loadPoi() {
                             console.log("no WP image for " + item.title);
                         }
                     }
-                    setTimeout(setImageInPopup,100); //needed here too if site called with popup open
             });
 
             r.append($('<tr>')
@@ -1450,30 +1420,9 @@ function loadPoi() {
     if(tags['image']) {
         if(tags['image'].match(/^File:/)) {
             var imagename = tags['image'].replace(/ /,"_");
-            var req_string = "https://commons.wikimedia.org/w/api.php"
-                + "?action=query"
-                + "&format=json"
-                + "&titles=" + imagename
-                + "&prop=imageinfo"
-                + "&iiprop=url"
-                + "&iiurlwidth=276";
-            $.getJSON(req_string+ "&callback=?", function(data) {
-                for(obj_id in data.query.pages) {
-                    var item = data.query.pages[obj_id];
-                    console.log("got answer from wikimedia commons for " + item.title + ".");
-                    if(item.imageinfo[0]) {
-                        var item_name = decodeURIComponent(item.imageinfo[0].descriptionurl.replace(/.*\//,'')); //item.title is with spaces instead of underscores.
-                        wikipedia_images["wpimage_" + item_name] = item.imageinfo[0].thumburl;
-                    } else {
-                        wikipedia_images["wpimage_" + item.title.replace(/ /,"_") ] = "UNDEF";
-                        console.log("no WP image for " + item.title);
-                    }
-                }
-                setTimeout(setImageInPopup,100); //needed here too if site called with popup open
-            });
-
+            var new_src = checkForMWimages(imagename);
             content += '<tr class=header>'+
-              "<td colspan=2 id='wp-image'><a href='https://commons.wikimedia.org/wiki/" + imagename + "' target=_blank><img id='" + imagename + "' title='" + imagename + "'/> © Wikimedia Commons</a></td>"+
+              "<td colspan=2 id='wp-image'><a href='https://commons.wikimedia.org/wiki/" + imagename + "' target=_blank><img id='" + imagename + "' title='" + imagename + "' src='" + new_src + "'/> © Wikimedia Commons</a></td>"+
               "</tr>";
 
         }
@@ -2213,3 +2162,21 @@ window.onload = function () {
     map.setAttribute( 'class', map.getAttribute('class') + ' ie');
 }
 
+var popup_image_width = "276";
+/*
+ * checks if a image link points to a Mediawiki and if, returns link to thumbnail version of image
+ */
+function checkForMWimages(image_uri) {
+  var retval = image_uri;
+  if(image_uri.match(/\/wiki\/File:/)) { // guess it is any Mediawiki instance
+    retval = image_uri.replace(/ /,"_")
+      .replace(/\/File:/,'/Special:Redirect/file/')
+      + "?width=" + popup_image_width;
+  } else if (image_uri.match(/^File:/)) { // take File: for hosted at Wikimedia Commons
+    retval = image_uri.replace(/ /,"_")
+      .replace(/^File:/,'https://commons.wikimedia.org/wiki/Special:Redirect/file/')
+      + "?width=" + popup_image_width;
+  }
+
+  return retval;
+}
