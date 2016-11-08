@@ -234,7 +234,7 @@ var different_maps = [
     $(function () {
 
       var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: [attr.osm, attr.osm_tiles, attr.overpass, attr.greenmap].join(', '),
+                                       attribution: [attr.osm, attr.osm_tiles, attr.overpass, attr.greenmap, "Concept <a href='http://wheelroute.at'>wheelroute.at</a>."].join(', '),
         maxZoom : 20,
         maxNativeZoom: 19,
         noWrap: true
