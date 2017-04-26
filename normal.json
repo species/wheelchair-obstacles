@@ -2,7 +2,7 @@
   "version": 0.6,
   "generator": "Overpass API",
   "osm3s": {
-    "timestamp_osm_base": "2017-04-26T08:12:22Z",
+    "timestamp_osm_base": "2017-04-26T08:26:22Z",
     "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
   },
   "elements": [
@@ -17418,6 +17418,32 @@
 },
 {
   "type": "way",
+  "id": 4236775,
+  "nodes": [
+    25293500,
+    952303548,
+    4718578778,
+    952251565,
+    952252481,
+    1728968869,
+    952249420,
+    3792538110,
+    2491103986,
+    25293501
+  ],
+  "tags": {
+    "access": "permissive",
+    "access:lanes": "yes|restricted",
+    "highway": "service",
+    "incline": "up",
+    "is_in": "Graz,Graz,Steiermark,Österreich,Europe",
+    "lanes": "2",
+    "name": "Anton-Leb-Gasse",
+    "oneway": "yes"
+  }
+},
+{
+  "type": "way",
   "id": 4236776,
   "nodes": [
     25293537,
@@ -19695,6 +19721,29 @@
     "highway": "footway",
     "surface": "paved",
     "width": "1.9"
+  }
+},
+{
+  "type": "way",
+  "id": 81739329,
+  "nodes": [
+    952251005,
+    952305217,
+    4590546171,
+    3023129050,
+    952305843,
+    952305919,
+    952304025,
+    952304234
+  ],
+  "tags": {
+    "access": "permissive",
+    "bicycle": "no",
+    "highway": "service",
+    "incline": "down",
+    "name": "Anton-Leb-Gasse",
+    "note": "Fahrverbot für Radfahrer während Bauarbeiten",
+    "oneway": "yes"
   }
 },
 {
@@ -22594,6 +22643,28 @@
     "name": "Steyrergasse",
     "sidewalk": "separate",
     "turn:lanes:forward": "left|right"
+  }
+},
+{
+  "type": "way",
+  "id": 160928049,
+  "nodes": [
+    952304234,
+    952251110,
+    2102988676,
+    25293500
+  ],
+  "tags": {
+    "access": "permissive",
+    "access:lanes": "|no|",
+    "bicycle:lanes": "|designated|",
+    "highway": "service",
+    "incline": "down",
+    "lanes": "3",
+    "name": "Anton-Leb-Gasse",
+    "oneway": "yes",
+    "turn:lanes": "left|throught|right",
+    "width:lanes": "|1|"
   }
 },
 {
@@ -50498,6 +50569,25 @@
     "highway": "footway",
     "surface": "paved",
     "width": "1.7"
+  }
+},
+{
+  "type": "way",
+  "id": 489524728,
+  "nodes": [
+    4718578792,
+    4718578772,
+    4718578771,
+    4718578770,
+    4718578769,
+    4718578768
+  ],
+  "tags": {
+    "footway": "sidewalk",
+    "highway": "footway",
+    "incline": "up",
+    "source": "survey",
+    "surface": "paved"
   }
 },
 {
@@ -83304,6 +83394,12 @@
 },
 {
   "type": "node",
+  "id": 25293501,
+  "lat": 47.0811611,
+  "lon": 15.4624589
+},
+{
+  "type": "node",
   "id": 25293537,
   "lat": 47.0813627,
   "lon": 15.4640120
@@ -83496,15 +83592,81 @@
 },
 {
   "type": "node",
+  "id": 952249420,
+  "lat": 47.0811398,
+  "lon": 15.4621030
+},
+{
+  "type": "node",
+  "id": 952251005,
+  "lat": 47.0812651,
+  "lon": 15.4624352
+},
+{
+  "type": "node",
+  "id": 952251110,
+  "lat": 47.0808148,
+  "lon": 15.4611216
+},
+{
+  "type": "node",
+  "id": 952251565,
+  "lat": 47.0807958,
+  "lon": 15.4613265
+},
+{
+  "type": "node",
   "id": 952252432,
   "lat": 47.0806093,
   "lon": 15.4611665
 },
 {
   "type": "node",
+  "id": 952252481,
+  "lat": 47.0809923,
+  "lon": 15.4616749
+},
+{
+  "type": "node",
   "id": 952252864,
   "lat": 47.0804717,
   "lon": 15.4642997
+},
+{
+  "type": "node",
+  "id": 952303548,
+  "lat": 47.0807301,
+  "lon": 15.4611611
+},
+{
+  "type": "node",
+  "id": 952304025,
+  "lat": 47.0811397,
+  "lon": 15.4616581
+},
+{
+  "type": "node",
+  "id": 952304234,
+  "lat": 47.0809012,
+  "lon": 15.4612544
+},
+{
+  "type": "node",
+  "id": 952305217,
+  "lat": 47.0812537,
+  "lon": 15.4622748
+},
+{
+  "type": "node",
+  "id": 952305843,
+  "lat": 47.0812259,
+  "lon": 15.4618525
+},
+{
+  "type": "node",
+  "id": 952305919,
+  "lat": 47.0812015,
+  "lon": 15.4617605
 },
 {
   "type": "node",
@@ -83724,6 +83886,12 @@
 },
 {
   "type": "node",
+  "id": 1728968869,
+  "lat": 47.0810861,
+  "lon": 15.4618887
+},
+{
+  "type": "node",
   "id": 1781766222,
   "lat": 47.0792039,
   "lon": 15.4660245
@@ -83769,6 +83937,12 @@
   "id": 2060660308,
   "lat": 47.0792343,
   "lon": 15.4660774
+},
+{
+  "type": "node",
+  "id": 2102988676,
+  "lat": 47.0807705,
+  "lon": 15.4610675
 },
 {
   "type": "node",
@@ -83850,6 +84024,12 @@
 },
 {
   "type": "node",
+  "id": 2491103986,
+  "lat": 47.0811578,
+  "lon": 15.4624033
+},
+{
+  "type": "node",
   "id": 2501851416,
   "lat": 47.0811886,
   "lon": 15.4613003
@@ -83907,6 +84087,12 @@
   "id": 2941729491,
   "lat": 47.0795003,
   "lon": 15.4664519
+},
+{
+  "type": "node",
+  "id": 3023129050,
+  "lat": 47.0812434,
+  "lon": 15.4619679
 },
 {
   "type": "node",
@@ -84009,6 +84195,12 @@
   "id": 3792538102,
   "lat": 47.0803030,
   "lon": 15.4616088
+},
+{
+  "type": "node",
+  "id": 3792538110,
+  "lat": 47.0811551,
+  "lon": 15.4623587
 },
 {
   "type": "node",
@@ -84288,6 +84480,12 @@
 },
 {
   "type": "node",
+  "id": 4590546171,
+  "lat": 47.0812461,
+  "lon": 15.4620476
+},
+{
+  "type": "node",
   "id": 4718577699,
   "lat": 47.0826575,
   "lon": 15.4600795
@@ -84348,6 +84546,42 @@
 },
 {
   "type": "node",
+  "id": 4718578768,
+  "lat": 47.0811098,
+  "lon": 15.4621344
+},
+{
+  "type": "node",
+  "id": 4718578769,
+  "lat": 47.0810792,
+  "lon": 15.4619996
+},
+{
+  "type": "node",
+  "id": 4718578770,
+  "lat": 47.0810299,
+  "lon": 15.4618474
+},
+{
+  "type": "node",
+  "id": 4718578771,
+  "lat": 47.0809253,
+  "lon": 15.4616503
+},
+{
+  "type": "node",
+  "id": 4718578772,
+  "lat": 47.0808034,
+  "lon": 15.4614337
+},
+{
+  "type": "node",
+  "id": 4718578778,
+  "lat": 47.0807528,
+  "lon": 15.4612183
+},
+{
+  "type": "node",
   "id": 4718578779,
   "lat": 47.0808640,
   "lon": 15.4610514
@@ -84399,6 +84633,12 @@
   "id": 4718578788,
   "lat": 47.0806492,
   "lon": 15.4612418
+},
+{
+  "type": "node",
+  "id": 4718578792,
+  "lat": 47.0807214,
+  "lon": 15.4612690
 },
 {
   "type": "node",
