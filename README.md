@@ -9,6 +9,8 @@ for performance reason, the data displayed is a static file, only updated once i
 
 Update:
 
+```
 wget -O normal.json --post-file=normal.query "http://overpass-api.de/api/interpreter"
 wget -O athletic.json --post-file=athletic.query "http://overpass-api.de/api/interpreter"
 wget -O electro.json --post-file=electro.query "http://overpass-api.de/api/interpreter"
+```
